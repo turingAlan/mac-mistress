@@ -218,5 +218,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <p align="center">
-  <sub>Made with 💧 by <a href="https://github.com/turingAlan">Sarthak Jain</a></sub>
+  <sub>Made with 💧 by <a href="https://github.com/turingAlan">turingAlan</a></sub>
 </p>
