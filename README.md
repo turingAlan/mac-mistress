@@ -26,7 +26,7 @@
 ## Download
 
 <p align="center">
-  <a href="https://github.com/turingAlan/mac-mistress/releases/latest/download/MacMistress.dmg">
+  <a href="https://github.com/turingAlan/mac-mistress/releases/latest">
     <img src="https://img.shields.io/badge/⬇_Download_Mac_Mistress-v1.0.0-8A2BE2?style=for-the-badge&labelColor=1a1a2e&logo=apple&logoColor=white" alt="Download Mac Mistress v1.0.0" height="48">
   </a>
 </p>

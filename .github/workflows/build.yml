@@ -78,4 +78,3 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: build/MacMistress-${{ steps.version.outputs.version }}.dmg
-          files: build/MacMistress-${{ steps.version.outputs.version }}.dmg
