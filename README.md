@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sarthakjain/mac-mistress/releases/latest"><img src="https://img.shields.io/badge/Download-DMG-blue?style=for-the-badge&logo=apple" alt="Download DMG"></a>
+  <a href="https://github.com/turingAlan/mac-mistress/releases/latest"><img src="https://img.shields.io/badge/Download-DMG-blue?style=for-the-badge&logo=apple" alt="Download DMG"></a>
   <img src="https://img.shields.io/badge/macOS-13.0+-black?style=for-the-badge&logo=apple" alt="macOS 13.0+">
   <img src="https://img.shields.io/badge/Swift-5.9-orange?style=for-the-badge&logo=swift" alt="Swift 5.9">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
@@ -26,7 +26,7 @@
 ## Download
 
 <p align="center">
-  <a href="https://github.com/sarthakjain/mac-mistress/releases/latest/download/MacMistress.dmg">
+  <a href="https://github.com/turingAlan/mac-mistress/releases/latest/download/MacMistress.dmg">
     <img src="https://img.shields.io/badge/⬇_Download_Mac_Mistress-v1.0.0-8A2BE2?style=for-the-badge&labelColor=1a1a2e&logo=apple&logoColor=white" alt="Download Mac Mistress v1.0.0" height="48">
   </a>
 </p>
@@ -60,7 +60,7 @@
 
 ### Download the DMG (Recommended)
 
-1. Download the latest `.dmg` from [**Releases**](https://github.com/sarthakjain/mac-mistress/releases/latest)
+1. Download the latest `.dmg` from [**Releases**](https://github.com/turingAlan/mac-mistress/releases/latest)
 2. Open the DMG and drag **Mac Mistress** to Applications
 3. Launch from Applications or Spotlight
 4. Grant any requested permissions (Accessibility for system event monitoring)
@@ -69,7 +69,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/sarthakjain/mac-mistress.git
+git clone https://github.com/turingAlan/mac-mistress.git
 cd mac-mistress
 
 # Build and run in debug mode
@@ -218,5 +218,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <p align="center">
-  <sub>Made with 💧 by <a href="https://github.com/sarthakjain">Sarthak Jain</a></sub>
+  <sub>Made with 💧 by <a href="https://github.com/turingAlan">Sarthak Jain</a></sub>
 </p>
