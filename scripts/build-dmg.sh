@@ -106,97 +106,37 @@ echo "✅ App bundle created at ${APP_BUNDLE}"
 
 # ─── Create aesthetic DMG ─────────────────────────────────────────
 echo "💿 Creating DMG..."
-DMG_TEMP="${BUILD_DIR}/temp.dmg"
 DMG_FINAL="${BUILD_DIR}/${DMG_NAME}"
-DMG_VOLUME="/Volumes/${APP_NAME}"
-DMG_SIZE="200m"
 
-mkdir -p "${DMG_DIR}"
-cp -R "${APP_BUNDLE}" "${DMG_DIR}/"
-ln -s /Applications "${DMG_DIR}/Applications"
+# Use create-dmg for reliable styling
+CREATE_DMG_ARGS=(
+    --volname "${APP_NAME}"
+    --volicon "${APP_BUNDLE}/Contents/Resources/AppIcon.icns"
+    --window-pos 200 120
+    --window-size 660 400
+    --icon-size 100
+    --icon "${APP_NAME}.app" 165 175
+    --icon "Applications" 495 175
+    --hide-extension "${APP_NAME}.app"
+    --app-drop-link 495 175
+    --text-size 13
+)
 
-# Copy background image
-BG_DIR="${DMG_DIR}/.background"
-mkdir -p "${BG_DIR}"
+# Add background if available
 if [ -f "assets/dmg-background.png" ]; then
-    cp "assets/dmg-background.png" "${BG_DIR}/background.png"
-    cp "assets/dmg-background@2x.png" "${BG_DIR}/background@2x.png" 2>/dev/null || true
+    CREATE_DMG_ARGS+=(--background "assets/dmg-background.png")
 fi
 
-# Create writable DMG
-hdiutil create -srcfolder "${DMG_DIR}" \
-    -volname "${APP_NAME}" \
-    -fs HFS+ -fsargs "-c c=64,a=16,e=16" \
-    -format UDRW -size "${DMG_SIZE}" \
-    "${DMG_TEMP}"
+# Remove existing DMG if present
+rm -f "${DMG_FINAL}"
 
-# Mount and style
-MOUNT_OUTPUT=$(hdiutil attach -readwrite -noverify "${DMG_TEMP}")
-DEVICE=$(echo "${MOUNT_OUTPUT}" | head -1 | awk '{print $1}')
+create-dmg "${CREATE_DMG_ARGS[@]}" "${DMG_FINAL}" "${APP_BUNDLE}"
 
-echo "   Styling DMG window..."
-
-# Apply Finder window settings via AppleScript
-sleep 2
-osascript <<APPLESCRIPT
-tell application "Finder"
-    tell disk "${APP_NAME}"
-        open
-        delay 2
-        set current view of container window to icon view
-        set toolbar visible of container window to false
-        set statusbar visible of container window to false
-        set bounds of container window to {100, 100, 760, 500}
-
-        set theViewOptions to icon view options of container window
-        set arrangement of theViewOptions to not arranged
-        set icon size of theViewOptions to 100
-        set text size of theViewOptions to 13
-        set label position of theViewOptions to bottom
-
-        -- Set background if available
-        try
-            set backgroundFile to file ".background:background.png"
-            set background picture of theViewOptions to backgroundFile
-        end try
-
-        -- Position icons
-        set position of item "${APP_NAME}.app" of container window to {165, 180}
-        set position of item "Applications" of container window to {495, 180}
-
-        update without registering applications
-        delay 1
-        close
-    end tell
-end tell
-APPLESCRIPT
-
-# Set white label color on icons (color index 6 = green shows as white-ish on dark bg doesn't work)
-# Use Finder label to make text visible on dark background
-osascript <<APPLESCRIPT
-tell application "Finder"
-    set theItems to every item of disk "${APP_NAME}"
-    repeat with theItem in theItems
-        set name of theItem to name of theItem -- refresh
-    end repeat
-end tell
-APPLESCRIPT
-
-# Set volume icon
-if [ -f "${APP_BUNDLE}/Contents/Resources/AppIcon.icns" ]; then
-    cp "${APP_BUNDLE}/Contents/Resources/AppIcon.icns" "${DMG_VOLUME}/.VolumeIcon.icns"
-    SetFile -a C "${DMG_VOLUME}" 2>/dev/null || true
+# create-dmg returns 2 if it couldn't set custom icon (non-fatal)
+if [ ! -f "${DMG_FINAL}" ]; then
+    echo "❌ DMG creation failed"
+    exit 1
 fi
-
-# Finalize
-chmod -Rf go-w "${DMG_VOLUME}" 2>/dev/null || true
-sync
-hdiutil detach "${DEVICE}" -quiet
-hdiutil convert "${DMG_TEMP}" -format UDZO -imagekey zlib-level=9 -o "${DMG_FINAL}"
-rm -f "${DMG_TEMP}"
-
-# Clean up staging dir
-rm -rf "${DMG_DIR}"
 
 echo ""
 echo "✅ Done!"

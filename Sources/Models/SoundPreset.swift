@@ -78,12 +78,29 @@ enum SoundPreset: String, CaseIterable, Identifiable {
 
         let candidates = fileNames(for: event)
 
-        // Check bundled resources first
+        // Check bundled resources first (main bundle)
         for name in candidates {
             if let bundlePath = Bundle.main.path(forResource: name,
                                                   ofType: nil,
                                                   inDirectory: "Resources/Presets/\(folder)") {
                 return bundlePath
+            }
+        }
+
+        // Check SPM resource bundle (Bundle.module equivalent)
+        // In .app builds, SPM resources are inside MacMistress_MacMistress.bundle
+        let resourceBundles = [
+            Bundle.main.url(forResource: "MacMistress_MacMistress", withExtension: "bundle").flatMap { Bundle(url: $0) },
+            Bundle.main
+        ].compactMap { $0 }
+
+        for bundle in resourceBundles {
+            for name in candidates {
+                if let path = bundle.path(forResource: name,
+                                          ofType: nil,
+                                          inDirectory: "Resources/Presets/\(folder)") {
+                    return path
+                }
             }
         }
 

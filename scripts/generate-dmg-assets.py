@@ -8,99 +8,81 @@ def generate_bg(w, h, filename):
     bg = Image.new("RGBA", (w, h))
     draw = ImageDraw.Draw(bg)
 
-    # Dark gradient background
+    # Light gradient background (soft white to light lavender)
     for y in range(h):
-        r = int(15 + (y / h) * 15)
-        g = int(10 + (y / h) * 12)
-        b = int(30 + (y / h) * 25)
+        t = y / h
+        r = int(245 - t * 10)
+        g = int(243 - t * 12)
+        b = int(250 - t * 5)
         draw.line([(0, y), (w, y)], fill=(r, g, b, 255))
 
-    # Add subtle purple radial glow in center
+    # Subtle purple radial glow in center
     glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     glow_draw = ImageDraw.Draw(glow)
     cx, cy = w // 2, h // 2
-    max_r = int(min(w, h) * 0.5)
+    max_r = int(min(w, h) * 0.55)
     for radius in range(max_r, 0, -1):
-        alpha = int(25 * (1 - radius / max_r))
+        alpha = int(18 * (1 - radius / max_r))
         glow_draw.ellipse(
             [cx - radius, cy - radius, cx + radius, cy + radius],
-            fill=(120, 80, 200, alpha),
+            fill=(160, 120, 220, alpha),
         )
     bg = Image.alpha_composite(bg, glow)
 
-    # Add top accent line
+    # Top accent gradient line (purple to blue)
     accent = Image.new("RGBA", (w, 3), (0, 0, 0, 0))
     accent_draw = ImageDraw.Draw(accent)
     for x in range(w):
         t = x / w
-        r = int(100 + t * 80)
-        g = int(60 + t * 40)
-        b = int(200 - t * 40)
-        accent_draw.point((x, 0), fill=(r, g, b, 200))
-        accent_draw.point((x, 1), fill=(r, g, b, 120))
-        accent_draw.point((x, 2), fill=(r, g, b, 40))
+        r = int(140 + t * 40)
+        g = int(80 + t * 50)
+        b = int(220 - t * 30)
+        accent_draw.point((x, 0), fill=(r, g, b, 180))
+        accent_draw.point((x, 1), fill=(r, g, b, 100))
+        accent_draw.point((x, 2), fill=(r, g, b, 30))
     bg.paste(accent, (0, 0), accent)
 
-    # Arrow between icon positions (scale relative to width)
+    # Arrow between icon positions
     arrow_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     arrow_draw = ImageDraw.Draw(arrow_layer)
     arrow_y = int(h * 0.45)
     arrow_x_start = int(w * 0.36)
     arrow_x_end = int(w * 0.64)
 
+    # Soft purple arrow shaft
     for i in range(3):
         arrow_draw.line(
             [(arrow_x_start, arrow_y + i - 1), (arrow_x_end - 15, arrow_y + i - 1)],
-            fill=(255, 255, 255, 50),
+            fill=(140, 100, 200, 70),
         )
-    for i in range(int(15 * w / 660)):
-        alpha = int(50 * (1 - i / (15 * w / 660)))
+    # Arrow head
+    head_size = int(15 * w / 660)
+    for i in range(head_size):
+        alpha = int(70 * (1 - i / head_size))
         arrow_draw.line(
             [(arrow_x_end - i, arrow_y - i), (arrow_x_end - i, arrow_y + i)],
-            fill=(255, 255, 255, int(alpha)),
+            fill=(140, 100, 200, int(alpha)),
         )
     bg = Image.alpha_composite(bg, arrow_layer)
 
-    # "Drag to Applications" text
+    # Text layer
     text_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     text_draw = ImageDraw.Draw(text_layer)
-    font_size = max(12, int(24 * w / 660))
-    label_font_size = max(11, int(13 * w / 660))
+    font_size = max(12, int(22 * w / 660))
     try:
         font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", font_size)
-        label_font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", label_font_size)
     except:
         font = ImageFont.load_default()
-        label_font = font
 
+    # "Drag to Applications" hint
     text_draw.text(
         (w // 2, int(h * 0.78)),
         "Drag to Applications",
-        fill=(255, 255, 255, 80),
+        fill=(100, 70, 160, 100),
         font=font,
         anchor="mm",
     )
 
-    # Icon labels (positioned below icon centers)
-    # App icon at x=165, Applications at x=495 (in 660px space), icons at y=180, label ~60px below icon center
-    app_label_x = int(165 * w / 660)
-    apps_label_x = int(495 * w / 660)
-    label_y = int(250 * h / 400)
-
-    text_draw.text(
-        (app_label_x, label_y),
-        "Mac Mistress",
-        fill=(255, 255, 255, 220),
-        font=label_font,
-        anchor="mt",
-    )
-    text_draw.text(
-        (apps_label_x, label_y),
-        "Applications",
-        fill=(255, 255, 255, 220),
-        font=label_font,
-        anchor="mt",
-    )
     bg = Image.alpha_composite(bg, text_layer)
 
     bg.convert("RGB").save(filename)
