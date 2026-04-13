@@ -27,7 +27,7 @@
 
 <p align="center">
   <a href="https://github.com/turingAlan/mac-mistress/releases/latest">
-    <img src="https://img.shields.io/badge/⬇_Download_Mac_Mistress-v1.0.1-8A2BE2?style=for-the-badge&labelColor=1a1a2e&logo=apple&logoColor=white" alt="Download Mac Mistress v1.0.1" height="48">
+    <img src="https://img.shields.io/badge/⬇_Download_Mac_Mistress-v1.0.2-8A2BE2?style=for-the-badge&labelColor=1a1a2e&logo=apple&logoColor=white" alt="Download Mac Mistress v1.0.2" height="48">
   </a>
 </p>
 
