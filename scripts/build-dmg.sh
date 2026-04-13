@@ -97,6 +97,11 @@ if [ -f "${ICON_SOURCE}" ]; then
     echo "✅ App icon generated"
 fi
 
+# ─── Code sign (ad-hoc) ──────────────────────────────────────────
+echo "🔏 Code signing (ad-hoc)..."
+codesign --force --deep --sign - "${APP_BUNDLE}"
+echo "✅ Code signed"
+
 echo "✅ App bundle created at ${APP_BUNDLE}"
 
 # ─── Create aesthetic DMG ─────────────────────────────────────────

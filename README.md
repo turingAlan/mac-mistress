@@ -62,8 +62,13 @@
 
 1. Download the latest `.dmg` from [**Releases**](https://github.com/turingAlan/mac-mistress/releases/latest)
 2. Open the DMG and drag **Mac Mistress** to Applications
-3. Launch from Applications or Spotlight
-4. Grant any requested permissions (Accessibility for system event monitoring)
+3. **First launch:** If macOS says the app is "damaged" or "can't be opened", run this in Terminal:
+   ```bash
+   xattr -cr /Applications/Mac\ Mistress.app
+   ```
+   This removes the quarantine flag that macOS applies to apps downloaded from the internet.
+4. Launch from Applications or Spotlight
+5. Grant any requested permissions (Accessibility for system event monitoring)
 
 ### Build from Source
 
